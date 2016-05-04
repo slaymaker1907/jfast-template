@@ -22,5 +22,10 @@
   		<artifactId>guava</artifactId>
   		<version>19.0</version>
   	</dependency>
+  	<dependency>
+  		<groupId>org.rapidoid</groupId>
+  		<artifactId>rapidoid-http-fast</artifactId>
+  		<version>5.0.12</version>
+  	</dependency>
   </dependencies>
 </project>

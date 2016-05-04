@@ -1,15 +1,15 @@
 package benchmarks;
 
-import com.dyllongagnier.cs4150.timing.FixedSampleSize;
 import com.dyllongagnier.cs4150.timing.JunkCode;
+import com.dyllongagnier.cs4150.timing.MinTimer;
 import com.dyllongagnier.template.TemplateFactory;;
 
 public class BenchmarkMain
 {
 	public static void main(String[] args)
 	{
-		int maxSize = 30;
-		 FixedSampleSize timer = new FixedSampleSize(1);
+		int maxSize = 255;
+		 MinTimer timer = new MinTimer(50);
 		 TemplateFactory factory = new TemplateFactory();
 		 JunkCode code = new FastTemplateCode(factory, 1);
 		 timer.warmup(code);
