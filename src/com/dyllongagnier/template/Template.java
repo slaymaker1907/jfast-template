@@ -12,30 +12,11 @@ public class Template implements TemplateComponent
 		ArrayList<String> tokens = shared.getTokens(template);
 		TokenParser parser = new TokenParser(tokens);
 		components = parser.getComponents();
-		minimumLength = this.getMinimumLength();
 	}
 	
 	public Template(TemplateComponent[] components)
 	{
 		this.components = components;
-		minimumLength = this.getMinimumLength();
-	}
-	
-	private int getMinimumLength()
-	{
-		int result = 0;
-		for(TemplateComponent component : components)
-		{
-			try
-			{
-				result += component.applyModule(null).length();
-			}
-			catch (ObjectNotFound e)
-			{
-			}
-		}
-		
-		return result;
 	}
 	
 	@Override
@@ -92,5 +73,14 @@ public class Template implements TemplateComponent
 		for(TemplateComponent component : components)
 			realized = realized && component.isRealized();
 		return realized;
+	}
+	
+	public BoundTemplate bind(SequencedModule module)
+	{
+		BoundTemplate result = new BoundTemplate(new String[0], new boolean[0], new int[0]);
+		for(TemplateComponent component : components)
+			result = result.append(component.bind(module));
+		
+		return result;
 	}
 }

@@ -32,6 +32,12 @@ public class TokenParser
 				case ".":
 					parseDot();
 					break;
+				case "{{":
+					parseOther("{");
+					break;
+				case "}}":
+					parseOther("}");
+					break;
 				default:
 					parseOther(token);
 					break;
@@ -80,7 +86,7 @@ public class TokenParser
 	{
 		if (!parsingVariable())
 			throw new InvalidTemplate("Unexpected } encountered.");
-		TemplateVariable toAdd = variable.build();
+		TemplateVariable toAdd = variable.addModule(emptyBuffer()).build();
 		variables.add(toAdd);
 		components.add(toAdd);
 		setParsingVariable(false);
@@ -103,14 +109,13 @@ public class TokenParser
 	
 	private void parseDot()
 	{
-		if (variable == null)
+		if (!parsingVariable())
 		{
 			buffer.append(".");
 		}
 		else
 		{
-			variable.addModule(buffer.toString());
-			buffer = new StringBuilder();
+			variable.addModule(emptyBuffer());
 		}
 	}
 }

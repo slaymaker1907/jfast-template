@@ -36,7 +36,9 @@ public class TemplateVariable implements Iterable<String>, TemplateComponent
 		this.modules = modules;
 		if(modules.length > 0)
 			nextVariable = new TemplateVariable(Arrays.copyOfRange(modules, 1, modules.length));
-		hash = Arrays.hashCode(modules);
+		hash = 0;
+		for(String module : modules)
+			hash += module.hashCode();
 	}
 	
 	/**
@@ -76,7 +78,12 @@ public class TemplateVariable implements Iterable<String>, TemplateComponent
 		try
 		{
 			TemplateVariable other = (TemplateVariable)o;
-			return Arrays.equals(this.modules, other.modules);
+			if (this.modules.length != other.modules.length)
+				return false;
+			for(int i = 0; i < this.modules.length; i++)
+				if (!this.modules[i].equals(other.modules[i]))
+					return false;
+			return true;
 		}
 		catch (Exception e)
 		{
@@ -132,5 +139,13 @@ public class TemplateVariable implements Iterable<String>, TemplateComponent
 	public boolean isRealized()
 	{
 		return false;
+	}
+
+	@Override
+	public BoundTemplate bind(SequencedModule module)
+	{
+		int[] queryOrder = {module.getIndex(this)};
+		boolean[] varPos = {true};
+		return new BoundTemplate(new String[0], varPos, queryOrder);
 	}
 }

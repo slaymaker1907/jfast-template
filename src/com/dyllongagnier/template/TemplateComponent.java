@@ -6,4 +6,5 @@ public interface TemplateComponent
 	public TemplateComponent partiallyApplyModule(TemplateObject module);
 	public CharSequence applyModuleNull(TemplateObject module);
 	public boolean isRealized();
+	public BoundTemplate bind(SequencedModule module);
 }

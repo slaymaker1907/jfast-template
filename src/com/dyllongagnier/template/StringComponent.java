@@ -32,4 +32,18 @@ public class StringComponent implements TemplateComponent
 	{
 		return true;
 	}
+
+	@Override
+	public BoundTemplate bind(SequencedModule module)
+	{
+		String[] components = {data};
+		boolean[] varPos = {false};
+		return new BoundTemplate(components, varPos, new int[0]);
+	}
+	
+	@Override
+	public String toString()
+	{
+		return data;
+	}
 }

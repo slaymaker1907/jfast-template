@@ -2,7 +2,7 @@ package com.dyllongagnier.template;
 
 import java.util.HashMap;
 
-public class TemplateModule implements TemplateObject
+public class TemplateModule implements AbstractTemplateModule
 {
 	private HashMap<String, TemplateObject> objects = new HashMap<>();
 	
@@ -10,6 +10,7 @@ public class TemplateModule implements TemplateObject
 	{
 	}
 	
+	@Override
 	public void setObject(TemplateVariable name, TemplateObject object)
 	{
 		String firstName = name.getModule(0);
@@ -27,12 +28,6 @@ public class TemplateModule implements TemplateObject
 			
 			((TemplateModule)ob).setObject(name.partiallyApply(), object);
 		}
-	}
-	
-	@Override
-	public boolean isConcrete()
-	{
-		return false;
 	}
 
 	@Override
