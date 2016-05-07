@@ -8,7 +8,7 @@ public class BenchmarkMain
 {
 	public static void main(String[] args)
 	{
-		int maxSize = 255;
+		int maxSize = 10000;
 		 MinTimer timer = new MinTimer(50);
 		 TemplateFactory factory = new TemplateFactory();
 		 JunkCode code = new FastTemplateCode(factory, 1);
