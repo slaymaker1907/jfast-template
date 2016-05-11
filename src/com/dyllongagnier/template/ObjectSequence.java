@@ -1,29 +1,31 @@
 package com.dyllongagnier.template;
 
-public class ObjectSequence
+public final class ObjectSequence
 {
 	private int insertPos, consumePos;
-	private CharSequence[] objects;
+	private char[][] objects;
 	private int[] copiesNeeded;
 	private int[] reverseLookup;
 	private int totalLength;
+	private StringExtractor extractor;
 	
 	// Don't mutate the insertion order.
-	public ObjectSequence(int[] queryOrder, int[] copiesNeeded)
+	public ObjectSequence(int[] queryOrder, int[] copiesNeeded, StringExtractor extractor)
 	{
 		this.reverseLookup = queryOrder;
 		this.copiesNeeded = copiesNeeded;
-		objects = new CharSequence[copiesNeeded.length];
+		objects = new char[copiesNeeded.length][];
+		this.extractor = extractor;
 		this.reset();
 	}
 	
-	public void addObject(CharSequence object)
+	public void addObject(String object)
 	{
 		totalLength += object.length() * copiesNeeded[insertPos];
-		objects[insertPos++] = object;
+		objects[insertPos++] = extractor.getArray(object);
 	}
 	
-	public CharSequence consumeObject()
+	public char[] consumeObject()
 	{
 		return objects[reverseLookup[consumePos++]];
 	}

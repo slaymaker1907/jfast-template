@@ -46,7 +46,7 @@ public class TokenParser
 		
 		String toAdd = emptyBuffer();
 		constants.add(toAdd);
-		components.add(new StringComponent(toAdd));
+		components.add(new TemplateString(toAdd));
 		
 		if (variable != null)
 			throw new InvalidTemplate("Input of template ended without finishing variable name.");
@@ -78,7 +78,7 @@ public class TokenParser
 			throw new InvalidTemplate("Had { in variable name.");
 		String toAdd = emptyBuffer();
 		constants.add(toAdd);
-		components.add(new StringComponent(toAdd));
+		components.add(new TemplateString(toAdd));
 		setParsingVariable(true);
 	}
 	

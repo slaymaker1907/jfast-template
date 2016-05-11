@@ -28,6 +28,12 @@ public class SequencedModule
 			return this;
 		}
 		
+		public SequencedModuleBuilder addVariable(String variableName)
+		{
+			TemplateVariable variable = TemplateVariable.fromString(variableName);
+			return this.addVariable(variable);
+		}
+		
 		public SequencedModule build()
 		{
 			HashMap<TemplateVariable, Integer> numberAlignment = new HashMap<>();

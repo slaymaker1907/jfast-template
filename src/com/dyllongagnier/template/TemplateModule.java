@@ -24,6 +24,7 @@ public class TemplateModule implements AbstractTemplateModule
 			if (ob == null || ob.isConcrete())
 			{
 				ob = new TemplateModule();
+				objects.put(firstName, ob);
 			}
 			
 			((TemplateModule)ob).setObject(name.partiallyApply(), object);
@@ -40,7 +41,7 @@ public class TemplateModule implements AbstractTemplateModule
 		
 		if (name.size() > 1)
 		{
-			return result.getObject(name);
+			return result.getObject(name.partiallyApply());
 		}
 		else
 		{
@@ -70,5 +71,28 @@ public class TemplateModule implements AbstractTemplateModule
 	public CharSequence getString() throws NonConcreteObject
 	{
 		throw new NonConcreteObject();
+	}
+	
+	public void setObject(String variableName, String object)
+	{
+		TemplateVariable var = TemplateVariable.fromString(variableName);
+		this.setObject(var, new TemplateString(object));
+	}
+	
+	public void setObject(String variableName, TemplateObject object)
+	{
+		TemplateVariable var = TemplateVariable.fromString(variableName);
+		this.setObject(var, object);
+	}
+	
+	public void setObject(TemplateVariable variable, String object)
+	{
+		this.setObject(variable, new TemplateString(object));
+	}
+
+	@Override
+	public boolean isConcrete()
+	{
+		return false;
 	}
 }

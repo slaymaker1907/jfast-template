@@ -2,6 +2,7 @@ package com.dyllongagnier.template;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 
 import com.google.common.collect.Iterators;
@@ -13,9 +14,28 @@ public class TemplateVariable implements Iterable<String>, TemplateComponent
 	{
 		private ArrayList<String> modules = new ArrayList<>();
 		
-		public TemplateVariableBuilder addModule(String module)
+		public TemplateVariableBuilder()
 		{
-			modules.add(module);
+		}
+		
+		public TemplateVariableBuilder(TemplateVariableBuilder other)
+		{
+			this.modules.addAll(other.modules);
+		}
+		
+		public TemplateVariableBuilder(String ... modules)
+		{
+			this.addModule(modules);
+		}
+		
+		public TemplateVariableBuilder clone()
+		{
+			return new TemplateVariableBuilder(this);
+		}
+		
+		public TemplateVariableBuilder addModule(String ... modules)
+		{
+			Collections.addAll(this.modules, modules);
 			return this;
 		}
 		
@@ -39,6 +59,27 @@ public class TemplateVariable implements Iterable<String>, TemplateComponent
 		hash = 0;
 		for(String module : modules)
 			hash += module.hashCode();
+	}
+	
+	public static TemplateVariable fromString(String variable)
+	{
+		ArrayList<String> modules = new ArrayList<>();
+		StringBuilder currentVar = new StringBuilder();
+		for(int i = 0; i < variable.length(); i++)
+		{
+			char current = variable.charAt(i);
+			if (current == '.')
+			{
+				modules.add(currentVar.toString());
+				currentVar.delete(0, currentVar.length());
+			}
+			else
+				currentVar.append(current);
+		}
+		
+		if (currentVar.length() != 0)
+			modules.add(currentVar.toString());
+		return new TemplateVariable(modules.toArray(new String[modules.size()]));
 	}
 	
 	/**
@@ -112,8 +153,23 @@ public class TemplateVariable implements Iterable<String>, TemplateComponent
 	@Override
 	public TemplateComponent partiallyApplyModule(TemplateObject module)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		TemplateObject obj = module.getObjectNull(this);
+		if (obj != null)
+		{
+			if (obj.isComponent())
+			{
+				try
+				{
+					return obj.getComponent();
+				}
+				catch (Exception e)
+				{
+					return this;
+				}
+			}
+		}
+		
+		return this;
 	}
 
 	@Override
@@ -146,6 +202,6 @@ public class TemplateVariable implements Iterable<String>, TemplateComponent
 	{
 		int[] queryOrder = {module.getIndex(this)};
 		boolean[] varPos = {true};
-		return new BoundTemplate(new String[0], varPos, queryOrder);
+		return new BoundTemplate(new char[0][0], varPos, queryOrder);
 	}
 }

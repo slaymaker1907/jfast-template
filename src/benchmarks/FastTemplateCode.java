@@ -15,7 +15,7 @@ public class FastTemplateCode implements JunkCode
 	private BoundTemplate template;
 	private RandomStringFactory factory = new RandomStringFactory();
 	private String[] variables = new String[3];
-	private StringBuilder result;
+	private CharSequence result;
 	private int stringSize;
 	private ObjectSequence sequence;
 	
@@ -24,10 +24,7 @@ public class FastTemplateCode implements JunkCode
 		this.stringSize = stringSize;
 		try
 		{
-			String[] copies = new String[10000];
-			for(int i = 0; i < copies.length; i++)
-				copies[i] = "{user.username}{user.password}{user.description}";
-			String template = String.join(", ", copies);
+			String template = "{{ \"username\":{user.username}, \"password\":{user.password}, \"description\":{user.description} }};";
 			Template temp = factory.getTemplate(template);
 			TemplateVariable username = new TemplateVariableBuilder()
 					.addModule("user")
